@@ -26,7 +26,7 @@ public class autoupdate : MonoBehaviour
     public clickonoff holywater;
     public clickonoff flame;
     public clickonoff diamond;
-    
+
     public clickonoff laurels;
     public clickonoff garlic;
     public clickonoff stake;
@@ -35,14 +35,12 @@ public class autoupdate : MonoBehaviour
     private IntPtr handle = IntPtr.Zero;
     int lastbyte = 0;
 
-    
+
 
     public void OpenProcess()
     {
-        
+
         handle = ProcessMemoryReaderApi.OpenProcess((uint)ProcessMemoryReaderApi.ProcessAccessType.PROCESS_VM_READ, 0, (uint)ReadProcess.Id);
-        
-        UnityEngine.Debug.Log("trying " + handle.ToInt32().ToString());
 
     }
 
@@ -52,7 +50,6 @@ public class autoupdate : MonoBehaviour
         int returned = ProcessMemoryReaderApi.ReadProcessMemory(handle, memoryaddress, buffer, bytesToRead, out pBytesRead);
 
         bytesRead = pBytesRead.ToInt32();
-        //UnityEngine.Debug.Log("read: " + returned.ToString() + " bytes");
         return buffer;
 
     }
@@ -61,50 +58,43 @@ public class autoupdate : MonoBehaviour
     {
 
         UnityEngine.Debug.Log("running");
-        
+
         if (ReadProcess == null && handle == IntPtr.Zero)
         {
-            
-            
+
+
             Process[] processes = Process.GetProcessesByName("fceux");
             if (processes.Length == 0 )
             {
                 yield break;
             }
-            
+
             ReadProcess = processes[0];
-            //ReadProcess = Process.GetProcessesByName("fceux").ToList().FirstOrDefault();
+
             if (ReadProcess == null)
             {
                 UnityEngine.Debug.Log("TEST null");
-                
+
                 yield break;
             }
-            
+
             OpenProcess();
-            
-            
+
+
         }
 
         uint baseaddress = 0x003B1388;
 
         uint paddress = baseaddress;
 
-        //int bytesread=0;
-        
-        offset = BitConverter.ToUInt32( ReadMemory((IntPtr)(paddress + (uint)ReadProcess.Modules[0].BaseAddress), 4, out int bytesread), 0 );
-        //offset += 0x91;
-        //offset += 0x01;
 
-        UnityEngine.Debug.Log(offset.ToString("X"));
+
+        offset = BitConverter.ToUInt32( ReadMemory((IntPtr)(paddress + (uint)ReadProcess.Modules[0].BaseAddress), 4, out int bytesread), 0 );
+
         byte[] results = ReadMemory((IntPtr)(offset + 0x91), 2, out bytesread);
 
-        
-           for (int i=0; i< results.Length; i++)
-          {
-             UnityEngine.Debug.Log(results[i].ToString());
-          }
-        
+
+
         if ((results[0] & 32) == 32)
         {
             if ((results[0] & 64) == 64)
@@ -206,7 +196,7 @@ public class autoupdate : MonoBehaviour
 
 
         results = ReadMemory((IntPtr)(offset + 0x004D), 1, out bytesread);
-        UnityEngine.Debug.Log("Garlic? "+results[0].ToString());
+        UnityEngine.Debug.Log("Garlic: "+results[0].ToString());
         if (results[0]> 0)
         {
             garlic.toggleon();
@@ -215,7 +205,7 @@ public class autoupdate : MonoBehaviour
             garlic.toggleoff();
         }
         results = ReadMemory((IntPtr)(offset + 0x004C), 1, out bytesread);
-        UnityEngine.Debug.Log("Laurels? " + results[0].ToString());
+        UnityEngine.Debug.Log("Laurels: " + results[0].ToString());
         if (results[0] > 0)
         {
             laurels.toggleon();
@@ -224,16 +214,16 @@ public class autoupdate : MonoBehaviour
             laurels.toggleoff();
         }
 
-        //lastbyte = results[0];
 
 
-        //int closed = ProcessMemoryReaderApi.CloseHandle(handle);
+
+
 
 
     }
     void test()
     {
-        
+
         StartCoroutine(getdata());
     }
 
@@ -241,20 +231,19 @@ public class autoupdate : MonoBehaviour
     void Start()
     {
 
-        
-        InvokeRepeating("test", 2.0f, 3.0f);
-        
+
+        InvokeRepeating("test", 2.0f, 1.0f);
+
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        //StartCoroutine(getdata());
 
 
     }
-    
+
 }
 
 
@@ -282,7 +271,7 @@ class ProcessMemoryReaderApi
         PROCESS_QUERY_LIMITED_INFORMATION = (0x1000)
     }
 
-    // function declarations are found in the MSDN and in <winbase.h> 
+    // function declarations are found in the MSDN and in <winbase.h>
 
     //		HANDLE OpenProcess(
     //			DWORD dwDesiredAccess,  // access flag
