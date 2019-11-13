@@ -6,35 +6,17 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using System.Linq;
 
+
+
 public class autoupdate : MonoBehaviour
 {
-    public clickonoff rib;
-    public clickonoff heart;
-    public clickonoff eyeball;
-    public clickonoff nail;
-    public clickonoff ring;
-    public clickonoff cross;
-    public clickonoff bag;
-
-    public clickonoff wcrystal;
-    public clickonoff bcrystal;
-    public clickonoff rcrystal;
-
-    public clickonoff dagger;
-    public clickonoff sdagger;
-    public clickonoff goldknife;
-    public clickonoff holywater;
-    public clickonoff flame;
-    public clickonoff diamond;
-
-    public clickonoff laurels;
-    public clickonoff garlic;
-    public clickonoff stake;
+   
 
     public Process ReadProcess = null;
     private IntPtr handle = IntPtr.Zero;
-    int lastbyte = 0;
+    
 
+    public controller controller;
 
 
     public void OpenProcess()
@@ -57,7 +39,20 @@ public class autoupdate : MonoBehaviour
     IEnumerator getdata()
     {
 
-        UnityEngine.Debug.Log("running");
+        //UnityEngine.Debug.Log("running");
+
+        if (ReadProcess != null)
+        {
+            Process check = Process.GetProcessById(ReadProcess.Id);
+            if (check.Id != ReadProcess.Id)
+            {
+                UnityEngine.Debug.Log("lost process? "+check.Id+" "+ReadProcess.Id);
+                ReadProcess = null;
+                handle = IntPtr.Zero;
+
+            }
+        }
+
 
         if (ReadProcess == null && handle == IntPtr.Zero)
         {
@@ -77,9 +72,14 @@ public class autoupdate : MonoBehaviour
 
                 yield break;
             }
+            UnityEngine.Debug.Log("found process " + ReadProcess.Id.ToString());
+            yield return new WaitForSeconds(5);
 
             OpenProcess();
+            UnityEngine.Debug.Log("opened process " + ReadProcess.Id.ToString());
+            yield return new WaitForSeconds(5);
 
+            
 
         }
 
@@ -100,118 +100,117 @@ public class autoupdate : MonoBehaviour
             if ((results[0] & 64) == 64)
             {
                 UnityEngine.Debug.Log("Have red crystal");
-                rcrystal.toggleon();
+                controller.curitems["rcrystal"] = true;
             }
             else
             {
                 UnityEngine.Debug.Log("Have white crystal");
-                wcrystal.toggleon();
+                
+                controller.curitems["wcrystal"] = true;
             }
         }
         if ((results[0] & 64) == 64)
         {
             UnityEngine.Debug.Log("Have blue crystal");
-            bcrystal.toggleon();
-            wcrystal.toggleon();
+            controller.curitems["bcrystal"] = true;
         }
 
         if ((results[0] & 1) == 1)
         {
             UnityEngine.Debug.Log("Have rib");
-            rib.toggleon();
+            controller.curitems["rib"] = true;
         }
         if ((results[0] & 2) == 2)
         {
             UnityEngine.Debug.Log("Have heart");
-            heart.toggleon();
+            controller.curitems["heart"] = true;
         }
         if ((results[0] & 4) == 4)
         {
             UnityEngine.Debug.Log("Have eye");
-            eyeball.toggleon();
+            controller.curitems["eyeball"] = true;
         }
         if ((results[0] & 8) == 8)
         {
             UnityEngine.Debug.Log("Have nail");
-            nail.toggleon();
+            controller.curitems["nail"] = true;
         }
         if ((results[0] & 16) == 16)
         {
             UnityEngine.Debug.Log("Have ring");
-            ring.toggleon();
+            controller.curitems["ring"] = true;
         }
         if ((results[1] & 2) == 2)
         {
             UnityEngine.Debug.Log("Have magic cross");
-            cross.toggleon();
+            controller.curitems["cross"] = true;
         }
         if ((results[1] & 1) == 1)
         {
             UnityEngine.Debug.Log("Have bag");
-            bag.toggleon();
+            controller.curitems["bag"] = true;
         }
         results = ReadMemory((IntPtr)(offset + 0x004A), 1, out bytesread);
-        for (int i = 0; i < results.Length; i++)
-        {
-            UnityEngine.Debug.Log(results[i].ToString());
-        }
+        
         if ((results[0] & 1) == 1)
         {
-            dagger.toggleon();
+            controller.curitems["dagger"] = true;
             UnityEngine.Debug.Log("Have dagger");
         }
         if ((results[0] & 2) == 2)
         {
-            sdagger.toggleon();
+            controller.curitems["silver dagger"] = true;
             UnityEngine.Debug.Log("Have silver dagger");
         }
         if ((results[0] & 4) == 4)
         {
-            goldknife.toggleon();
+            controller.curitems["gold knife"] = true;
             UnityEngine.Debug.Log("Have Gold Knife");
         }
         if ((results[0] & 8) == 8)
         {
-            holywater.toggleon();
+            controller.curitems["holy water"] = true;
             UnityEngine.Debug.Log("Have holy water");
         }
         if ((results[0] & 16) == 16)
         {
-            diamond.toggleon();
+            controller.curitems["diamond"] = true;
             UnityEngine.Debug.Log("Have diamond");
         }
         if ((results[0] & 32) == 32)
         {
-            flame.toggleon();
+            controller.curitems["flame"] = true;
             UnityEngine.Debug.Log("Have Sacred Flame");
         }
         if ((results[0] & 64) == 64)
         {
-            stake.toggleon();
+            controller.curitems["stake"] = true;
             UnityEngine.Debug.Log("Have Oak Stake");
         }else
         {
-            stake.toggleoff();
+            controller.olditems["stake"] = false;
         }
 
 
         results = ReadMemory((IntPtr)(offset + 0x004D), 1, out bytesread);
-        UnityEngine.Debug.Log("Garlic: "+results[0].ToString());
+        //UnityEngine.Debug.Log("Garlic: "+results[0].ToString());
         if (results[0]> 0)
         {
-            garlic.toggleon();
-        }else
+            controller.curitems["garlic"] = true;
+        }
+        else
         {
-            garlic.toggleoff();
+            controller.olditems["garlic"] = false;
         }
         results = ReadMemory((IntPtr)(offset + 0x004C), 1, out bytesread);
-        UnityEngine.Debug.Log("Laurels: " + results[0].ToString());
+        //UnityEngine.Debug.Log("Laurels: " + results[0].ToString());
         if (results[0] > 0)
         {
-            laurels.toggleon();
-        }else
+            controller.curitems["laurels"] = true;
+        }
+        else
         {
-            laurels.toggleoff();
+            controller.olditems["laurels"] = false;
         }
 
 
@@ -231,6 +230,7 @@ public class autoupdate : MonoBehaviour
     void Start()
     {
 
+        controller = FindObjectOfType<controller>();
 
         InvokeRepeating("test", 2.0f, 1.0f);
 

@@ -5,27 +5,25 @@ using UnityEngine;
 using UnityEngine.UI;
 public class clickonoff : MonoBehaviour
 {
+    controller controller;
     // Start is called before the first frame update
     void Start()
     {
-        toggle();
-
-
+        controller = FindObjectOfType<controller>();
+        controller.olditems[this.name] = false;
     }
 
     public void toggle()
     {
         //Debug.Log("clicked!");
-        Image image = this.gameObject.GetComponent<Image>();
-        Color color = image.color;
-        if (color.a == 1)
+        Debug.Log("toggling");
+        if (controller.olditems[this.name])
         {
-            color.a = 0.15f;
+            controller.olditems[this.name] = false;
         }else
         {
-            color.a = 1.0f;
+            controller.olditems[this.name] = true;
         }
-        image.color = color;
     }
     public void toggleon()
     {
@@ -36,6 +34,7 @@ public class clickonoff : MonoBehaviour
     }
     public void toggleoff()
     {
+        
         Image image = this.gameObject.GetComponent<Image>();
         Color color = image.color;
         color.a = 0.15f;
@@ -44,6 +43,17 @@ public class clickonoff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        bool on;
+        if (controller.olditems.TryGetValue(this.name, out on))
+        { 
+            if (on)
+            {
+                toggleon();
+            }
+            else
+            {
+                toggleoff();
+            }
+        }
     }
 }
