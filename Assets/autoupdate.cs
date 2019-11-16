@@ -73,11 +73,11 @@ public class autoupdate : MonoBehaviour
                 yield break;
             }
             UnityEngine.Debug.Log("found process " + ReadProcess.Id.ToString());
-            yield return new WaitForSeconds(5);
+            
 
             OpenProcess();
             UnityEngine.Debug.Log("opened process " + ReadProcess.Id.ToString());
-            yield return new WaitForSeconds(5);
+            
 
             
 

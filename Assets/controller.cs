@@ -36,5 +36,6 @@ public class controller : MonoBehaviour
                 olditems[item] = true;
             }
         }
+        curitems.Clear();
     }
 }
