@@ -2,7 +2,9 @@ Kaelari's Automated item tracker for CV2
 
 Displays all items and lights up when you have a given item, unlights if you lose that item. This is primarily intended for streamers to be able to show what items they have at all times. You can also click on things to manually toggle them.
 
-The automation will only work with FCEUX. 
+The automation will only work with FCEUX.
+
+To switch to flat mode click the blank space in the bottom right. This should have an icon but nothing i tried looked right. the right most space in flat mode will switch back to square mode.
 
 The repo doesn't have any actual builds, this might change at some point for now you must build the project yourself. This should be as simple as opening in unity and selecting build and run.
 
