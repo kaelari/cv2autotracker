@@ -1,6 +1,6 @@
 # Kaelari's Automated item tracker for CV2
 
-![](https://i.imgur.com/dqSsckJ.png)
+![](https://raw.githubusercontent.com/kaelari/cv2autotracker/master/autotracker.png)
 
 Displays all items and lights up when you have a given item, unlights if you lose that item. This is primarily intended for streamers to be able to show what items they have at all times. You can also click on things to manually toggle them.
 
