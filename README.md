@@ -2,6 +2,7 @@
 
 Square:
 ![](https://raw.githubusercontent.com/kaelari/cv2autotracker/master/screenshot_square.png)
+
 Flat:
 ![](https://raw.githubusercontent.com/kaelari/cv2autotracker/master/autotracker.png)
 
