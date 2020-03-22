@@ -6,13 +6,14 @@ public class controller : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    
     public Dictionary<string, bool> curitems = new Dictionary<string, bool>();
     public Dictionary<string, bool> olditems = new Dictionary<string, bool>();
     public GameObject square;
     public GameObject flat;
     void Start()
     {
-        
+        gosquare();    
     }
     public void gowide()
     {

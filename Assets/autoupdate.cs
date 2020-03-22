@@ -159,7 +159,7 @@ public class autoupdate : MonoBehaviour
         }
         if ((results[0] & 2) == 2)
         {
-            controller.curitems["silver dagger"] = true;
+            controller.curitems["silver knife"] = true;
             UnityEngine.Debug.Log("Have silver dagger");
         }
         if ((results[0] & 4) == 4)
